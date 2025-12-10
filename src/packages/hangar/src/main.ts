@@ -16,20 +16,29 @@ export async function start(path: string): Promise<void> {
 
   // src
   const pagesDir = folder(srcDir, "pages");
+  const componentsDir = folder(srcDir, "components");
 
   makeDirs(hangarDir, ["content"]);
 
   // logic
   await createPages(pagesDir, contentDir);
 
-  startWatching(pagesDir, contentDir);
+  startWatching(pagesDir, contentDir, componentsDir);
 
   await startVite(contentDir);
 }
 
-function startWatching(path: string, contentDir: string) {
+function startWatching(
+  path: string,
+  contentDir: string,
+  componentsDir: string
+) {
+  // direct page watching
   watch(path, { recursive: true }, async (_event, relativePath) => {
     createPage(folder(path, relativePath!), path, contentDir);
+  });
+  watch(componentsDir, { recursive: true }, async () => {
+    await createPages(path, contentDir);
   });
 }
 

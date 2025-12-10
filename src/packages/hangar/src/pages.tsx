@@ -1,8 +1,20 @@
-import { findFilesByExtensionRecursively, folder } from "./util";
+import { findFilesByExtensionRecursively, folder, safeMk } from "./util";
 import { renderToString } from "react-dom/server";
 import type { JSX } from "react";
 import nodePath from "node:path";
-import { lstatSync, writeFileSync } from "node:fs";
+import { existsSync, lstatSync, writeFileSync, readFileSync } from "node:fs";
+
+export const clientComponentMarker = "__client_component__";
+
+function extractClientComponentNames(html: string): string[] {
+  const names: string[] = [];
+  const regex = new RegExp(`id="${clientComponentMarker}-([^"]+)"`, "g");
+  let match;
+  while ((match = regex.exec(html)) !== null) {
+    names.push(match[1]!);
+  }
+  return [...new Set(names)]; // Remove duplicates
+}
 
 export async function createPages(
   path: string,
@@ -12,7 +24,7 @@ export async function createPages(
 
   for (let index = 0; index < items.length; index++) {
     const element = items[index]!;
-    createPage(element, path, targetPath);
+    await createPage(element, path, targetPath);
   }
 }
 
@@ -21,19 +33,32 @@ export async function createPage(
   rootPath: string,
   contentPath: string
 ): Promise<void> {
-  let pageModule = await import(`${path}?t=${Date.now()}`);
+  try {
+    let pageModule = await import(`${path}?t=${Date.now()}`);
 
-  const Page: () => JSX.Element = pageModule.default;
-  const rendered = renderToString(<Page />);
+    const Page: () => JSX.Element = pageModule.default;
 
-  const htmlPath = folder(
-    contentPath,
-    nodePath.relative(rootPath, path)
-  ).replace("tsx", "html");
+    let rendered = renderToString(<Page />);
 
-  if (lstatSync(htmlPath).isDirectory()) {
-    return;
+    let htmlPath = folder(
+      contentPath,
+      nodePath.relative(rootPath, path)
+    ).replace("tsx", "html");
+
+    if (!htmlPath.endsWith("index.html")) {
+      htmlPath = folder(htmlPath.slice(0, -".html".length), `index.html`);
+    }
+
+    safeMk(nodePath.dirname(htmlPath));
+    if (existsSync(htmlPath)) {
+      if (lstatSync(htmlPath).isDirectory()) {
+        return;
+      }
+    }
+
+    writeFileSync(htmlPath, rendered);
+  } catch (err) {
+    const error = err as Error;
+    console.error(`${error.name}: ${error.message}`);
   }
-
-  writeFileSync(htmlPath, rendered);
 }

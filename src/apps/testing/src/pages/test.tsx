@@ -1,8 +1,6 @@
 import type { JSX } from "react/jsx-runtime";
-import Info from "../components/info";
-import { ClientBoundary } from "@artimora/hangar";
 
-export default function Index(): JSX.Element {
+export default function TestPage(): JSX.Element {
   return (
     <html lang="en">
       <head>
@@ -11,10 +9,8 @@ export default function Index(): JSX.Element {
         <title>My Basic Page</title>
       </head>
       <body>
-        <h1>Welcome to My Page</h1>
-        <p>This is a simple paragraph of text</p>
-
-        <Info />
+        <h1>W :3 elcome to My Page</h1>
+        <p>This is a simpl3e paragraph of text</p>
       </body>
     </html>
   );

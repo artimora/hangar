@@ -10,7 +10,7 @@ export function makeDirs(root: string, sub: string[]): void {
 }
 
 export function safeMk(path: string): void {
-  if (!existsSync(path)) mkdirSync(path);
+  if (!existsSync(path)) mkdirSync(path, { recursive: true });
 }
 
 export function folder(root: string, sub: string): string {
