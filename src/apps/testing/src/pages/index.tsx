@@ -1,6 +1,10 @@
 import type { JSX } from "react/jsx-runtime";
+
+// component that was used was imported here
+//  get the source and check if its a client compoents
+//  if it is, rewrite the source to not include it on the server
+//  transpile the target component to js, and add it to where its needed on the client
 import Info from "../components/info";
-import { ClientBoundary } from "@artimora/hangar";
 
 export default function Index(): JSX.Element {
   return (
@@ -13,8 +17,7 @@ export default function Index(): JSX.Element {
       <body>
         <h1>Welcome to My Page</h1>
         <p>This is a simple paragraph of text</p>
-
-        <Info />
+        <Info /> {/* component used */}
       </body>
     </html>
   );
