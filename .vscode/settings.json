@@ -1,0 +1,52 @@
+{
+	"files.exclude": {
+		"**/node_modules": true,
+		"**/bun.lock": true,
+		"**/bun.lockb": true,
+		"**/package-lock.json": true,
+		"**/.zed": true,
+		"**/.rules": true,
+		"**/dist": true,
+		"**/.nvmrc": true,
+		"**/.node-version": true,
+		"src/packages/**/LICENSE": true,
+		"src/packages/**/README.md": true,
+		"src/apps/**/LICENSE": true,
+		"src/apps/**/README.md": true
+	},
+	"editor.defaultFormatter": "biomejs.biome",
+	"[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"emmet.showExpandedAbbreviation": "never",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.biome": "explicit",
+		"source.organizeImports.biome": "explicit"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[markdown]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[astro]": {
+		"editor.defaultFormatter": "astro-build.astro-vscode"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"editor.tabSize": 4,
+	"editor.detectIndentation": false,
+	"[jsonc]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	}
+}

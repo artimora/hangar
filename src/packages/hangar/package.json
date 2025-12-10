@@ -1,0 +1,43 @@
+{
+  "name": "@artimora/hangar",
+  "version": "0.1.0",
+  "description": "simple dev server",
+  "homepage": "https://github.com/artimora/hangar/tree/main/packages/hangar#readme",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artimora/hangar.git"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.5.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "vite": "^7.2.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3"
+  }
+}
