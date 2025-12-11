@@ -61,13 +61,16 @@ export async function createPage(
 			}
 		}
 
-		rendered = await addClientScript(rendered);
+		if (components.length > 0) rendered = await addClientScript(rendered);
 
 		writeFileSync(htmlPath, rendered);
-		writeFileSync(
-			folder(nodePath.dirname(htmlPath), "client.jsx"),
-			constructClientFile(components),
-		);
+
+		if (components.length > 0) {
+			writeFileSync(
+				folder(nodePath.dirname(htmlPath), "client.jsx"),
+				constructClientFile(components),
+			);
+		}
 	} catch (err) {
 		const error = err as Error;
 		console.error(`${error.name}: ${error.message}`);
