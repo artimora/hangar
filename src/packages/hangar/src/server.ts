@@ -1,16 +1,9 @@
 import viteReact from "@vitejs/plugin-react";
-import {
-	createServer,
-	mergeConfig,
-	type ResolvedConfig,
-	type ResolvedServerUrls,
-} from "vite";
+import { createServer, mergeConfig, type ResolvedServerUrls } from "vite";
+import type { Config } from "./types";
 import { getArg } from "./util";
 
-export async function startVite(
-	path: string,
-	additonalConfig?: ResolvedConfig,
-): Promise<void> {
+export async function startVite(path: string, config: Config): Promise<void> {
 	const server = await createServer(
 		mergeConfig(
 			{
@@ -18,13 +11,13 @@ export async function startVite(
 				configFile: false,
 				root: path,
 				server: {
-					port: 1337,
-					host: getArg("--host"),
+					port: config.port ?? 1337,
+					host: config.host ?? getArg("--host"),
 				},
 				plugins: [viteReact()],
 				logLevel: "silent",
 			},
-			additonalConfig ?? {},
+			config.vite ?? {},
 		),
 	);
 

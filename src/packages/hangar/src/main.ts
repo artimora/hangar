@@ -1,14 +1,13 @@
 import { watch } from "node:fs";
 import { fileURLToPath } from "bun";
-import type { ResolvedConfig } from "vite";
 import { createPage, createPages } from "./pages";
 import { startVite } from "./server";
+import type { Config } from "./types";
 import { folder, makeDirs } from "./util";
 
-export async function start(
-	path: string,
-	vite?: ResolvedConfig,
-): Promise<void> {
+export async function start(path: string, config: Config = {}): Promise<void> {
+	config ?? {};
+
 	const dir = fileURLToPath(new URL("../", path));
 
 	// base
@@ -28,7 +27,7 @@ export async function start(
 
 	startWatching(pagesDir, contentDir, hangarDir);
 
-	await startVite(contentDir, vite);
+	await startVite(contentDir, config);
 }
 
 function startWatching(path: string, contentDir: string, hangarPath: string) {
