@@ -1,9 +1,9 @@
-import { fileURLToPath } from "bun";
-import { folder, makeDirs } from "./util";
-import { createServer } from "vite";
 import { watch } from "node:fs";
-import { createPage, createPages } from "./pages";
 import viteReact from "@vitejs/plugin-react";
+import { fileURLToPath } from "bun";
+import { createServer } from "vite";
+import { createPage, createPages } from "./pages";
+import { folder, makeDirs } from "./util";
 
 export async function start(path: string): Promise<void> {
   const dir = fileURLToPath(new URL("../", path));
@@ -17,30 +17,22 @@ export async function start(path: string): Promise<void> {
 
   // src
   const pagesDir = folder(srcDir, "pages");
-  const componentsDir = folder(srcDir, "components");
 
   makeDirs(hangarDir, ["content"]);
 
   // logic
   await createPages(pagesDir, contentDir, hangarDir);
 
-  startWatching(pagesDir, contentDir, componentsDir, hangarDir);
+  startWatching(pagesDir, contentDir, hangarDir);
 
   await startVite(contentDir);
 }
 
-function startWatching(
-  path: string,
-  contentDir: string,
-  componentsDir: string,
-  hangarPath: string
-) {
+function startWatching(path: string, contentDir: string, hangarPath: string) {
   // direct page watching
   watch(path, { recursive: true }, async (_event, relativePath) => {
+    // biome-ignore lint/style/noNonNullAssertion: praying its not lowkey
     createPage(folder(path, relativePath!), path, contentDir, hangarPath);
-  });
-  watch(componentsDir, { recursive: true }, async () => {
-    await createPages(path, contentDir, hangarPath);
   });
 }
 

@@ -1,7 +1,5 @@
 import type { JSX } from "react/jsx-runtime";
-
 import Info from "../components/info";
-import { ClientBoundary } from "@artimora/hangar";
 
 export default function Index(): JSX.Element {
   return (
@@ -16,7 +14,7 @@ export default function Index(): JSX.Element {
         <p>This is a simple paragraph of text</p>
         {/* <Info  /> {/* component used */}
         {/* <ClientBoundary name={"info"} children={<Info />} /> */}
-        <Info data-client-component="info" />
+        <Info data-client-component />
       </body>
     </html>
   );

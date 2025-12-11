@@ -12,8 +12,8 @@ export default function Info(): JSX.Element {
       <p>{document.location.origin}</p>
 
       <h2>Count Value: {countValue}</h2>
-      <button onClick={increment}>+1</button>
       <button onClick={decrement}>-1</button>
+      <button onClick={increment}>+1</button>
     </div>
   );
 }
