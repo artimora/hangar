@@ -6,6 +6,7 @@ import {
 	type UserConfig,
 	type ViteDevServer,
 } from "vite";
+import pkg from "../package.json";
 import type { Config } from "./types";
 import { getArg } from "./util";
 
@@ -42,9 +43,9 @@ function printServerUrls(urls: ResolvedServerUrls | null) {
 	const local = prettyUrls(urls.local);
 	const network = prettyUrls(urls.network);
 
-	console.log("hangar server");
-	if (local) console.log(`> Local: ${local}`);
-	console.log(`> Network: ${network ?? "use --host to expose"}`);
+	console.log(`  Hangar ${pkg.version}`);
+	if (local) console.log(`   Local: ${local}`);
+	console.log(`   Network: ${network ?? "use --host to expose"}`);
 
 	function prettyUrls(urls: string[] | undefined): string | null {
 		if (urls === undefined) {
