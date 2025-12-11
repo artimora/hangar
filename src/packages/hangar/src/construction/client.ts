@@ -152,22 +152,66 @@ export async function getClientComponents(
 export function constructClientFile(
 	components: { path: string; uuid: string }[],
 ): string {
+	const items = new Map<string, string[]>();
+
+	for (let index = 0; index < components.length; index++) {
+		const element = components[index];
+
+		if (!element) continue;
+
+		if (items.has(element.path)) {
+			const gotten = items.get(element.path);
+
+			if (gotten) {
+				items.set(element.path, [...gotten, element.uuid]);
+			}
+		} else {
+			items.set(element.path, [element.uuid]);
+		}
+	}
+
 	return `// @ts-check
 import { createRoot } from "react-dom/client";
 
-${components
-	.map((component) => {
-		return `{
-  const navDomNode = document.getElementById("${component.path}#${component.uuid}");
+${items
+	.keys()
+	.map((v) => {
+		const uuids = items.get(v)!;
+
+		if (uuids.length > 1) {
+			return `{
+    const Item = (await import("${cleanPath(atob(v))}")).default;    
+    ${uuids
+			.map((u) => {
+				return `
+    {
+        const navDomNode = document.getElementById("${v}#${u}");
+
+        if (navDomNode) {
+            const navRoot = createRoot(navDomNode);
+            navRoot.render(<Item />);
+        }
+    }`;
+			})
+			.join(EOL)}
+}
+`;
+		} else if (uuids.length === 1) {
+			return `{
+  const navDomNode = document.getElementById("${v}#${uuids[0]}");
 
   if (navDomNode) {
-    const Item = (await import("${cleanPath(atob(component.path))}")).default;
+    const Item = (await import("${cleanPath(atob(v))}")).default;
     const navRoot = createRoot(navDomNode);
     navRoot.render(<Item />);
   }
 }
 `;
+		} else {
+			return "";
+		}
 	})
+	.toArray()
 	.join(EOL)}
 `;
 }
