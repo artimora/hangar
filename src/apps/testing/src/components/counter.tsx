@@ -9,8 +9,12 @@ export default function Counter(): JSX.Element {
 	return (
 		<div>
 			<h2>Count Value: {countValue}</h2>
-			<button onClick={decrement}>-1</button>
-			<button onClick={increment}>+1</button>
+			<button type="button" onClick={decrement}>
+				-1
+			</button>
+			<button type="button" onClick={increment}>
+				+1
+			</button>
 		</div>
 	);
 }
