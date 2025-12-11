@@ -39,3 +39,20 @@ export function findFilesByExtensionRecursively(
 
 	return foundFiles;
 }
+
+/**
+ * @returns string if the argument has a value or bool if its just the value
+ * @param {string} arg argument to check for
+ */
+export function getArg(arg: string): string | boolean {
+	const args = process.argv;
+	if (args.includes(arg)) {
+		if (arg === args[args.length - 1]) {
+			return true;
+		} else {
+			const item = args[args.indexOf(arg) + 1];
+			if (item) return item;
+		}
+	}
+	return false;
+}
