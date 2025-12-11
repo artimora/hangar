@@ -9,6 +9,7 @@ import {
 	constructClientFile,
 	getClientComponents,
 } from "./construction";
+import render from "./render";
 import { findFilesByExtensionRecursively, folder, safeMk } from "./util";
 
 export async function createPages(
@@ -40,9 +41,10 @@ export async function createPage(
 
 		const pageModule = await import(`${tempPath}?t=${Date.now()}`);
 
-		const Page: () => JSX.Element = pageModule.default;
-
-		let rendered = renderToString(<Page />);
+		let rendered = render(
+			pageModule.default,
+			components.length > 0 ? "string" : "staticMarkup",
+		);
 
 		let htmlPath = folder(
 			contentPath,
