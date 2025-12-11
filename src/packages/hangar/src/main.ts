@@ -1,5 +1,5 @@
 import { watch } from "node:fs";
-import { fileURLToPath } from "bun";
+import { fileURLToPath } from "node:url";
 import type { ViteDevServer } from "vite";
 import { createPage, createPages } from "./pages";
 import { startVite } from "./server";

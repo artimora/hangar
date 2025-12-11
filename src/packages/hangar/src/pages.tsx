@@ -1,8 +1,8 @@
 import { btoa } from "node:buffer";
 import { existsSync, lstatSync, writeFileSync } from "node:fs";
+import fs from "node:fs/promises";
 import { EOL } from "node:os";
 import nodePath from "node:path";
-import { file } from "bun";
 import type { JSX } from "react";
 import { renderToString } from "react-dom/server";
 import { findFilesByExtensionRecursively, folder, safeMk } from "./util";
@@ -27,14 +27,12 @@ export async function createPage(
 	hangarPath: string,
 ): Promise<void> {
 	try {
-		const f = file(path);
-		const updated = await updateType(await f.text(), path);
+		const contents = await fs.readFile(path, "utf8");
+		const updated = await updateType(await contents, path);
 		const components = await getClientComponents(updated);
 
 		const tempPath = folder(hangarPath, "temp.tsx");
-
-		const temp = file(tempPath);
-		await temp.write(updated);
+		writeFileSync(tempPath, updated);
 
 		const pageModule = await import(`${tempPath}?t=${Date.now()}`);
 
