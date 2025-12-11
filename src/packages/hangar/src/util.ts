@@ -56,3 +56,11 @@ export function getArg(arg: string): string | boolean {
 	}
 	return false;
 }
+
+export function cleanPath(path: string): string {
+	// some bs lowkey
+	return path
+		.replaceAll("\\", nodePath.sep)
+		.replaceAll("/", nodePath.sep)
+		.replaceAll(nodePath.sep, "/");
+}

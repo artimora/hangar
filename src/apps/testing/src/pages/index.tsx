@@ -1,5 +1,6 @@
 import type { JSX } from "react/jsx-runtime";
 import Counter from "../components/counter";
+import EffectTest from "../components/effect-test";
 import Info from "../components/info";
 
 export default function Index(): JSX.Element {
@@ -22,6 +23,7 @@ export default function Index(): JSX.Element {
 					</li>
 				</ol>
 
+				<EffectTest data-client-component />
 				<Info data-client-component />
 				<Counter data-client-component />
 			</body>

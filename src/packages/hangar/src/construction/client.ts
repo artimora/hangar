@@ -2,7 +2,8 @@ import { btoa } from "node:buffer";
 import { existsSync } from "node:fs";
 import { EOL } from "node:os";
 import nodePath from "node:path";
-
+import { pathToFileURL } from "node:url";
+import { cleanPath } from "../util";
 import { expandSelfClosingJSX, stripComments } from ".";
 
 export async function clientComponentConverter(
@@ -27,6 +28,7 @@ export async function clientComponentConverter(
 			let componentAbsolutePath = "?";
 			for (const name of candidates) {
 				const resolved = importMap.get(name);
+
 				if (resolved) {
 					componentAbsolutePath = resolved;
 					break;
@@ -45,7 +47,29 @@ export async function clientComponentConverter(
 	input = expandSelfClosingJSX(input);
 	input = stripComments(input);
 
-	const transformedHtml = await rewriter.transform(new Response(input)).text();
+	let transformedHtml = await rewriter.transform(new Response(input)).text();
+
+	// convert relative import specifiers to absolute file:// URLs
+	const importRegex = /import\s+([\w$]+)\s+from\s+["'](.+?)["']/g;
+	transformedHtml = transformedHtml.replace(
+		importRegex,
+		(full, localName: string, specifier: string) => {
+			if (
+				!specifier ||
+				(!specifier.startsWith(".") && !specifier.startsWith("/"))
+			) {
+				return full;
+			}
+
+			const resolved =
+				importMap.get(localName) ??
+				resolveImportPath(nodePath.dirname(pagePath), specifier);
+
+			const specifierUrl = pathToFileURL(cleanPath(resolved)).href;
+
+			return `import ${localName} from "${specifierUrl}"`;
+		},
+	);
 
 	return transformedHtml;
 }
@@ -68,11 +92,10 @@ function buildImportMap(input: string, pagePath: string): Map<string, string> {
 		}
 
 		const resolvedPath = resolveImportPath(pageDir, specifier);
-		imports.set(localName!, resolvedPath);
+		imports.set(localName!.toLowerCase(), resolvedPath);
 
 		match = regex.exec(input);
 	}
-
 	return imports;
 }
 
@@ -129,7 +152,7 @@ ${ids
   const navDomNode = document.getElementById("${id}");
 
   if (navDomNode) {
-    const Item = (await import("${atob(id)}")).default;
+    const Item = (await import("${cleanPath(atob(id))}")).default;
     const navRoot = createRoot(navDomNode);
     navRoot.render(<Item />);
   }
