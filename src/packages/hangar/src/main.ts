@@ -3,6 +3,7 @@ import { folder, makeDirs } from "./util";
 import { createServer } from "vite";
 import { watch } from "node:fs";
 import { createPage, createPages } from "./pages";
+import viteReact from "@vitejs/plugin-react";
 
 export async function start(path: string): Promise<void> {
   const dir = fileURLToPath(new URL("../", path));
@@ -21,9 +22,9 @@ export async function start(path: string): Promise<void> {
   makeDirs(hangarDir, ["content"]);
 
   // logic
-  await createPages(pagesDir, contentDir);
+  await createPages(pagesDir, contentDir, hangarDir);
 
-  startWatching(pagesDir, contentDir, componentsDir);
+  startWatching(pagesDir, contentDir, componentsDir, hangarDir);
 
   await startVite(contentDir);
 }
@@ -31,14 +32,15 @@ export async function start(path: string): Promise<void> {
 function startWatching(
   path: string,
   contentDir: string,
-  componentsDir: string
+  componentsDir: string,
+  hangarPath: string
 ) {
   // direct page watching
   watch(path, { recursive: true }, async (_event, relativePath) => {
-    createPage(folder(path, relativePath!), path, contentDir);
+    createPage(folder(path, relativePath!), path, contentDir, hangarPath);
   });
   watch(componentsDir, { recursive: true }, async () => {
-    await createPages(path, contentDir);
+    await createPages(path, contentDir, hangarPath);
   });
 }
 
@@ -50,6 +52,7 @@ async function startVite(path: string): Promise<void> {
     server: {
       port: 1337,
     },
+    plugins: [viteReact()],
   });
   await server.listen();
   server.printUrls();

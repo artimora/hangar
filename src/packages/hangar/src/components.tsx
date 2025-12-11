@@ -13,7 +13,7 @@ export function ClientBoundary({
     return (
       <div
         id={`${clientComponentMarker}-${name}`}
-        data-component={name}
+        data-client-component
         suppressHydrationWarning
       />
     );
@@ -22,7 +22,7 @@ export function ClientBoundary({
   return (
     <div
       id={`${clientComponentMarker}-${name}`}
-      data-component={name}
+      data-client-component
       suppressHydrationWarning
     >
       {children}
