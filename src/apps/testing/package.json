@@ -1,44 +1,44 @@
 {
-  "name": "hangar-testing",
-  "description": "testing hangar lol",
-  "version": "1.0.0",
-  "type": "module",
-  "private": true,
-  "files": [
-    "dist"
-  ],
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
-    },
-    "./package.json": "./package.json"
-  },
-  "author": {
-    "name": "copperdevs",
-    "url": "https://github.com/copperdevs",
-    "email": "me@copperdevs.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/artimora/hangar"
-  },
-  "bugs": "https://github.com/artimora/hangar/issues",
-  "homepage": "https://github.com/artimora/hangar",
-  "license": "MIT",
-  "dependencies": {
-    "vite": "^7.2.7",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "@artimora/hangar": "workspace:*"
-  },
-  "devDependencies": {
-    "@types/bun": "^1.2.12",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3"
-  }
+	"name": "hangar-testing",
+	"description": "testing hangar lol",
+	"version": "1.0.0",
+	"type": "module",
+	"private": true,
+	"files": [
+		"dist"
+	],
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			}
+		},
+		"./package.json": "./package.json"
+	},
+	"author": {
+		"name": "copperdevs",
+		"url": "https://github.com/copperdevs",
+		"email": "me@copperdevs.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/artimora/hangar"
+	},
+	"bugs": "https://github.com/artimora/hangar/issues",
+	"homepage": "https://github.com/artimora/hangar",
+	"license": "MIT",
+	"dependencies": {
+		"vite": "^7.2.7",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
+		"@artimora/hangar": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.2.12",
+		"@types/react": "^19.2.7",
+		"@types/react-dom": "^19.2.3"
+	}
 }
