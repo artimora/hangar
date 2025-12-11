@@ -1,4 +1,5 @@
 import { defineWorkspace } from "bunup";
+import { copy } from "bunup/plugins";
 
 export default defineWorkspace(
 	[
@@ -16,5 +17,6 @@ export default defineWorkspace(
 		exports: true,
 		external: ["bun"],
 		format: ["cjs", "esm"],
+		plugins: [copy(["../../../ReadMe.md", "../../../License.txt"]).to("../")],
 	},
 );

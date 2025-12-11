@@ -19,3 +19,7 @@ yarn-error.log*
 .env.production.local
 .turbo
 .hangar
+src/packages/**/License.txt
+src/packages/**/ReadMe.md
+src/apps/**/License.txt
+src/apps/**/ReadMe.md
