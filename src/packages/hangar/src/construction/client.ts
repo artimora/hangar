@@ -35,12 +35,18 @@ export async function clientComponentConverter(
 				}
 			}
 
-			element.replace(
-				`<div id="${btoa(componentAbsolutePath)}#${crypto.randomUUID()}" data-client-component ></div>`,
-				{
-					html: true,
-				},
+			element.before(
+				`<div id="${btoa(componentAbsolutePath)}#${crypto.randomUUID()}" data-client-component >`,
+				{ html: true },
 			);
+			element.after(`</div>`, { html: true });
+			element.removeAndKeepContent();
+			// element.replace(
+			// 	`<div id="${btoa(componentAbsolutePath)}#${crypto.randomUUID()}" data-client-component ></div>`,
+			// 	{
+			// 		html: true,
+			// 	},
+			// );
 		},
 	});
 
@@ -142,8 +148,6 @@ export async function getClientComponents(
 		},
 	});
 	await rewriter.transform(new Response(input)).text();
-
-	console.log(components);
 
 	return components;
 }

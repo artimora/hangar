@@ -21,6 +21,9 @@ export default function Index(): JSX.Element {
 					<li>
 						<a href="/pure/">pure</a>
 					</li>
+					<li>
+						<a href="/radix/">radix</a>
+					</li>
 				</ol>
 
 				<EffectTest data-client-component />

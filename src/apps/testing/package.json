@@ -31,10 +31,11 @@
 	"homepage": "https://github.com/artimora/hangar",
 	"license": "MIT",
 	"dependencies": {
-		"vite": "^7.2.7",
+		"@artimora/hangar": "workspace:*",
+		"@radix-ui/themes": "^3.2.1",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
-		"@artimora/hangar": "workspace:*"
+		"vite": "^7.2.7"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.2.12",
