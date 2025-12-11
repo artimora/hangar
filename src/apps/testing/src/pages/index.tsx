@@ -26,6 +26,7 @@ export default function Index(): JSX.Element {
 				<EffectTest data-client-component />
 				<Info data-client-component />
 				<Counter data-client-component />
+				<Counter data-client-component />
 			</body>
 		</html>
 	);

@@ -36,7 +36,7 @@ export async function clientComponentConverter(
 			}
 
 			element.replace(
-				`<div id="${btoa(componentAbsolutePath)}" data-client-component ></div>`,
+				`<div id="${btoa(componentAbsolutePath)}#${crypto.randomUUID()}" data-client-component ></div>`,
 				{
 					html: true,
 				},
@@ -126,33 +126,42 @@ export async function addClientScript(input: string): Promise<string> {
 	return transformedHtml;
 }
 
-export async function getClientComponents(input: string): Promise<string[]> {
-	const components: string[] = [];
+export async function getClientComponents(
+	input: string,
+): Promise<{ path: string; uuid: string }[]> {
+	const components: { path: string; uuid: string }[] = [];
 	const rewriter = new HTMLRewriter().on("[data-client-component]", {
 		element(element) {
 			const id = element.getAttribute("id");
 
 			if (id !== null) {
-				components.push(id);
+				const split = id.split("#");
+
+				components.push({ path: split[0]!, uuid: split[1]! });
 			}
 		},
 	});
 	await rewriter.transform(new Response(input)).text();
 
+	console.log(components);
+
 	return components;
 }
 
-export function constructClientFile(ids: string[]): string {
+// uuid is always unique, but path isn't always. imports could be simplified so each unique component is imported once
+export function constructClientFile(
+	components: { path: string; uuid: string }[],
+): string {
 	return `// @ts-check
 import { createRoot } from "react-dom/client";
 
-${ids
-	.map((id) => {
+${components
+	.map((component) => {
 		return `{
-  const navDomNode = document.getElementById("${id}");
+  const navDomNode = document.getElementById("${component.path}#${component.uuid}");
 
   if (navDomNode) {
-    const Item = (await import("${cleanPath(atob(id))}")).default;
+    const Item = (await import("${cleanPath(atob(component.path))}")).default;
     const navRoot = createRoot(navDomNode);
     navRoot.render(<Item />);
   }
