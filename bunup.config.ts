@@ -17,5 +17,6 @@ export default defineWorkspace(
 		},
 		exports: true,
 		external: ["bun"],
+		format: ["cjs", "esm"],
 	},
 );
