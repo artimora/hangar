@@ -9,6 +9,7 @@
 		"**/dist": true,
 		"**/.nvmrc": true,
 		"**/.node-version": true,
+		"**/.hangar": true,
 		"src/packages/**/LICENSE": true,
 		"src/packages/**/README.md": true,
 		"src/apps/**/LICENSE": true,
