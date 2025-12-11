@@ -1,5 +1,6 @@
 import type { JSX } from "react/jsx-runtime";
 import Info from "../components/info";
+import Counter from "../components/counter";
 
 export default function Index(): JSX.Element {
 	return (
@@ -15,6 +16,7 @@ export default function Index(): JSX.Element {
 				{/* <Info  /> {/* component used */}
 				{/* <ClientBoundary name={"info"} children={<Info />} /> */}
 				<Info data-client-component />
+                <Counter data-client-component />
 			</body>
 		</html>
 	);
