@@ -1,29 +1,39 @@
 import viteReact from "@vitejs/plugin-react";
-import { createServer, mergeConfig, type ResolvedServerUrls } from "vite";
+import {
+	createServer,
+	mergeConfig,
+	type ResolvedServerUrls,
+	type UserConfig,
+	type ViteDevServer,
+} from "vite";
 import type { Config } from "./types";
 import { getArg } from "./util";
 
-export async function startVite(path: string, config: Config): Promise<void> {
-	const server = await createServer(
-		mergeConfig(
-			{
-				// any valid user config options, plus `mode` and `configFile`
-				configFile: false,
-				root: path,
-				server: {
-					port: config.port ?? 1337,
-					host: config.host ?? getArg("--host"),
-				},
-				plugins: [viteReact()],
-				logLevel: "silent",
-			},
-			config.vite ?? {},
-		),
-	);
+export async function startVite(
+	path: string,
+	config: Config,
+): Promise<ViteDevServer | undefined> {
+	config.middleware ?? false;
+	const included: UserConfig = {
+		root: path,
+		server: {
+			port: config.port ?? 1337,
+			host: config.host ?? getArg("--host"),
+		},
+		plugins: [viteReact()],
+		logLevel: "silent",
+		appType: config.middleware ? "custom" : "mpa",
+	};
 
-	await server.listen();
+	const server = await createServer(mergeConfig(included, config.vite ?? {}));
+
+	if (!config.middleware) {
+		await server.listen();
+	}
 
 	printServerUrls(server.resolvedUrls);
+
+	return server;
 }
 
 function printServerUrls(urls: ResolvedServerUrls | null) {

@@ -1,0 +1,20 @@
+{
+	"name": "hangar-mounted-testing",
+	"description": "testing mounted hangar lol",
+	"version": "1.0.0",
+	"type": "module",
+	"private": true,
+	"dependencies": {
+		"@artimora/hangar": "workspace:*",
+		"@hono/node-server": "^1.19.7",
+		"hono": "^4.10.8",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
+		"vite": "^7.2.7"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.2.12",
+		"@types/react": "^19.2.7",
+		"@types/react-dom": "^19.2.3"
+	}
+}

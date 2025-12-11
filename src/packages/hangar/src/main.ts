@@ -1,11 +1,25 @@
 import { watch } from "node:fs";
 import { fileURLToPath } from "bun";
+import type { ViteDevServer } from "vite";
 import { createPage, createPages } from "./pages";
 import { startVite } from "./server";
 import type { Config } from "./types";
 import { folder, makeDirs } from "./util";
 
-export async function start(path: string, config: Config = {}): Promise<void> {
+export async function start(
+	path: string,
+	config: Config = {},
+): Promise<
+	| undefined
+	| {
+			paths: {
+				root: string;
+				hangar: { root: string; content: string };
+				project: { root: string; pages: string };
+			};
+			vite: ViteDevServer | undefined;
+	  }
+> {
 	config ?? {};
 
 	const dir = fileURLToPath(new URL("../", path));
@@ -27,7 +41,22 @@ export async function start(path: string, config: Config = {}): Promise<void> {
 
 	startWatching(pagesDir, contentDir, hangarDir);
 
-	await startVite(contentDir, config);
+	const vite = await startVite(contentDir, config);
+
+	return {
+		paths: {
+			root: dir,
+			hangar: {
+				root: hangarDir,
+				content: contentDir,
+			},
+			project: {
+				root: srcDir,
+				pages: pagesDir,
+			},
+		},
+		vite,
+	};
 }
 
 function startWatching(path: string, contentDir: string, hangarPath: string) {
