@@ -12,7 +12,7 @@ export async function addStylesheets(
 
 				console.log(path);
 
-				element.append(`<link rel="stylesheet" href="${path}"></link>`, {
+				element.append(`<link rel="stylesheet" href="/@fs/${path}"></link>`, {
 					html: true,
 				});
 			}

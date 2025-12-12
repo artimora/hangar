@@ -1,3 +1,3 @@
 import { start } from "@artimora/hangar";
 
-start(import.meta.url);
+await start(import.meta.url);
