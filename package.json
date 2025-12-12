@@ -6,7 +6,8 @@
 		"build:packages": "bunup --exports",
 		"dev:packages": "bunup --watch --exports",
 		"dev:test": "cd src/apps/testing && bun --bun run src/index.tsx",
-		"dev:mounted": "cd src/apps/mounted && bun --bun run src/index.ts"
+		"dev:mounted": "cd src/apps/mounted && bun --bun run src/index.ts",
+		"dev:compilation": "cd src/apps/compilation && bun --bun --watch run src/index.tsx"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.3.4",
