@@ -1,25 +1,45 @@
 import { watch } from "node:fs";
 import { fileURLToPath } from "node:url";
+import type { ExecutionContext, Hono } from "hono";
 import type { ViteDevServer } from "vite";
-import { createPage, createPages } from "./pages";
-import { startVite } from "./server";
-import type { Config } from "./types";
-import { folder, makeDirs } from "./util";
+import {
+	type Config,
+	createPage,
+	createPages,
+	folder,
+	type Info,
+	makeDirs,
+	type Paths,
+	startVite,
+} from "./core";
+import { mount, type NodeBindings } from "./mounting";
+
+export class Hangar {
+	public info: Info;
+	public paths: Paths;
+
+	private hono: Hono<{ Bindings: NodeBindings }>;
+
+	constructor(info: Info) {
+		this.info = info;
+		this.paths = info.paths;
+		this.hono = mount(this.info);
+		this.handle = async (request, env, ctx) => {
+			return await this.hono.fetch(request, env, ctx);
+		};
+	}
+
+	public handle: (
+		request: Request,
+		Env?: {} | NodeBindings | undefined | any,
+		executionCtx?: ExecutionContext,
+	) => Promise<Response> | Response;
+}
 
 export async function start(
 	path: string,
 	config: Config = {},
-): Promise<
-	| undefined
-	| {
-			paths: {
-				root: string;
-				hangar: { root: string; content: string };
-				project: { root: string; pages: string };
-			};
-			vite: ViteDevServer | undefined;
-	  }
-> {
+): Promise<Hangar> {
 	config ?? {};
 
 	const dir = fileURLToPath(new URL("../", path));
@@ -43,7 +63,7 @@ export async function start(
 
 	const vite = await startVite(contentDir, config);
 
-	return {
+	const info: Info = {
 		paths: {
 			root: dir,
 			hangar: {
@@ -56,7 +76,12 @@ export async function start(
 			},
 		},
 		vite,
+		config,
 	};
+
+	const hangar = new Hangar(info);
+
+	return hangar;
 }
 
 function startWatching(
@@ -67,8 +92,8 @@ function startWatching(
 ) {
 	// direct page watching
 	watch(path, { recursive: true }, async (_event, relativePath) => {
-		// biome-ignore lint/style/noNonNullAssertion: praying its not lowkey
 		createPage(
+			// biome-ignore lint/style/noNonNullAssertion: praying its not lowkey
 			folder(path, relativePath!),
 			path,
 			contentDir,

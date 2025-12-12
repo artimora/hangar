@@ -6,7 +6,7 @@ import {
 	type UserConfig,
 	type ViteDevServer,
 } from "vite";
-import pkg from "../package.json";
+import pkg from "../../package.json";
 import type { Config } from "./types";
 import { getArg } from "./util";
 
