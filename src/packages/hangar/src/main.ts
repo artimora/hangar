@@ -46,8 +46,15 @@ export class Hangar extends Hono<{ Bindings: NodeBindings }> {
 
 	serve: () => void;
 }
-
 export async function start(
+	path: string,
+	config: Config = { port: 1337, logs: true },
+): Promise<void> {
+	const server = await create(path, config);
+	server.serve();
+}
+
+export async function create(
 	path: string,
 	config: Config = { port: 1337, logs: true },
 ): Promise<Hangar> {

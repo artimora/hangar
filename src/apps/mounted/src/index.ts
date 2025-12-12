@@ -1,6 +1,6 @@
-import { start } from "@artimora/hangar";
+import { create } from "@artimora/hangar";
 
-const server = await start(import.meta.url);
+const server = await create(import.meta.url);
 
 server.get("/api/hello", (c) => {
 	return c.json({ msg: "Hello from Hono API + Vite hot module reload!" });
