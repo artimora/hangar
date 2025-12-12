@@ -1,17 +1,20 @@
+import { Flex, Heading, Link, Text } from "@radix-ui/themes";
 import type { JSX } from "react/jsx-runtime";
+import BaseLayout from "../layouts/base-layout";
 
 export default function Pure(): JSX.Element {
 	return (
-		<html lang="en">
-			<head>
-				<meta charSet="UTF-8" />
-				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-				<title>coutning</title>
-			</head>
-			<body>
-				<a href="/">home</a>
-				<h1>nothing but pure html on this page!</h1>
-			</body>
-		</html>
+		<BaseLayout title="radix">
+			<Flex direction="column" gap="2">
+				<Heading>nothing but pure basic html used here!</Heading>
+				<Text>
+					<i>
+						okay technically vite puts its own references here, but theres no
+						client component script!
+					</i>
+				</Text>
+				<Link href="/">/home</Link>
+			</Flex>
+		</BaseLayout>
 	);
 }
