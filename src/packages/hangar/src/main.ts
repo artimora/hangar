@@ -10,6 +10,7 @@ import {
 	folder,
 	type Info,
 	makeDirs,
+	type Paths,
 	startVite,
 } from "./core";
 import {
@@ -79,20 +80,24 @@ export async function create(
 
 	startWatching(pagesDir, contentDir, hangarDir, dir);
 
-	const vite = await startVite(contentDir, config);
+	const vite = await startVite(srcDir, config, path);
+
+	const paths: Paths = {
+		root: dir,
+		hangar: {
+			root: hangarDir,
+			content: contentDir,
+		},
+		project: {
+			root: srcDir,
+			pages: pagesDir,
+		},
+	};
+
+	console.log(paths);
 
 	const info: Info = {
-		paths: {
-			root: dir,
-			hangar: {
-				root: hangarDir,
-				content: contentDir,
-			},
-			project: {
-				root: srcDir,
-				pages: pagesDir,
-			},
-		},
+		paths,
 		vite,
 		config,
 	};

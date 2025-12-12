@@ -3,8 +3,8 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"build:packages": "bunup --exports",
-		"dev:packages": "bunup --watch --exports",
+		"build:packages": "bunup --exports --sourcemap",
+		"dev:packages": "bunup --watch --exports --sourcemap",
 		"dev:test": "cd src/apps/testing && bun --bun run src/index.tsx",
 		"dev:mounted": "cd src/apps/mounted && bun --bun run src/index.ts",
 		"dev:compilation": "cd src/apps/compilation && bun --bun --watch run src/index.tsx"

@@ -2,6 +2,7 @@ import "@radix-ui/themes/styles.css";
 import { Button, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import type { JSX } from "react/jsx-runtime";
 import BaseLayout from "../layouts/base-layout";
+import "@radix-ui/themes/styles.css";
 
 export default function Pure(): JSX.Element {
 	return (

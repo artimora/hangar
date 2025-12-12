@@ -6,6 +6,7 @@ import {
 	addStylesheets,
 	clientComponentConverter,
 	constructClientFile,
+	extractCssImports,
 	getClientComponents,
 } from "./construction";
 import render from "./render";
@@ -36,10 +37,10 @@ export async function createPage(
 		const contents = await fs.readFile(path, "utf8");
 		const updated = await clientComponentConverter(contents, path);
 		const components = await getClientComponents(updated);
-		const styled = await addStylesheets(updated, projectPath);
+		const cssImports = extractCssImports(updated);
 
 		const tempPath = folder(hangarPath, "temp.tsx");
-		writeFileSync(tempPath, styled);
+		writeFileSync(tempPath, updated);
 
 		const pageModule = await import(`${tempPath}?t=${Date.now()}`);
 
@@ -66,8 +67,8 @@ export async function createPage(
 		}
 
 		if (components.length > 0) rendered = await addClientScript(rendered);
-		rendered = await addStylesheets(rendered, projectPath);
 
+		htmlPath = await addStylesheets(htmlPath, projectPath, cssImports);
 		writeFileSync(htmlPath, rendered);
 
 		if (components.length > 0) {
@@ -77,7 +78,8 @@ export async function createPage(
 			);
 		}
 	} catch (err) {
-		const error = err as Error;
-		console.error(`${error.name}: ${error.message}`);
+		// const error = err as Error;
+		// console.error(`${error.name}: ${error.message}`);
+		console.error(err);
 	}
 }

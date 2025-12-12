@@ -1,4 +1,5 @@
 import type { JSX } from "react/jsx-runtime";
+import Links from "./links";
 
 export default function Index(): JSX.Element {
 	return (
@@ -21,6 +22,13 @@ export default function Index(): JSX.Element {
 					<li>
 						<a href="/radix/">radix</a>
 					</li>
+					<Links
+						links={[
+							["/test/", "counting"],
+							["/pure/", "pure"],
+							["/radix/", "radix"],
+						]}
+					/>
 				</ol>
 			</body>
 		</html>

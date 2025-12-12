@@ -4,6 +4,7 @@ import Counter from "../components/counter";
 import EffectTest from "../components/effect-test";
 import Info from "../components/info";
 import BaseLayout from "../layouts/base-layout";
+import "@radix-ui/themes/styles.css";
 
 export default function Index(): JSX.Element {
 	return (

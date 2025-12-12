@@ -2,6 +2,7 @@ import { Flex, Link } from "@radix-ui/themes";
 import type { JSX } from "react/jsx-runtime";
 import Counter from "../components/counter";
 import BaseLayout from "../layouts/base-layout";
+import "@radix-ui/themes/styles.css";
 
 export default function Test(): JSX.Element {
 	return (

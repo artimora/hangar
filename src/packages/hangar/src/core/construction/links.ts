@@ -1,8 +1,8 @@
 export async function addStylesheets(
 	input: string,
 	projectRoot: string,
+	imports: string[],
 ): Promise<string> {
-	const imports = extractCssImports(input);
 	const rewriter = new HTMLRewriter().on("head", {
 		element(element) {
 			for (let index = 0; index < imports.length; index++) {
@@ -28,7 +28,7 @@ export function resolveFrom(projectRoot: string, spec: string): string {
 	return require.resolve(spec, { paths: [projectRoot] });
 }
 
-function extractCssImports(source: string): string[] {
+export function extractCssImports(source: string): string[] {
 	const importRegex = /import\s+(?:[^'"]*from\s+)?["']([^"']+\.css)["']/g;
 
 	return Array.from(
