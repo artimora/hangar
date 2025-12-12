@@ -1,6 +1,6 @@
-// import "@radix-ui/themes/styles.css";
+import "@radix-ui/themes/styles.css";
+import { Button, Flex, Link, Text, Theme } from "@radix-ui/themes";
 import type { JSX } from "react/jsx-runtime";
-import Radix from "../components/radix-test";
 
 export default function Pure(): JSX.Element {
 	return (
@@ -11,7 +11,13 @@ export default function Pure(): JSX.Element {
 				<title>radix</title>
 			</head>
 			<body>
-				<Radix data-client-component />
+				<Theme appearance="dark" radius="medium" panelBackground="translucent">
+					<Flex direction="column" gap="2">
+						<Text>Hello from Radix Themes :)</Text>
+						<Button>Let's go</Button>
+						<Link href="/">/home</Link>
+					</Flex>
+				</Theme>
 			</body>
 		</html>
 	);

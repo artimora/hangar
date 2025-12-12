@@ -37,9 +37,9 @@ export async function start(
 	makeDirs(hangarDir, ["content"]);
 
 	// logic
-	await createPages(pagesDir, contentDir, hangarDir);
+	await createPages(pagesDir, contentDir, hangarDir, dir);
 
-	startWatching(pagesDir, contentDir, hangarDir);
+	startWatching(pagesDir, contentDir, hangarDir, dir);
 
 	const vite = await startVite(contentDir, config);
 
@@ -59,10 +59,21 @@ export async function start(
 	};
 }
 
-function startWatching(path: string, contentDir: string, hangarPath: string) {
+function startWatching(
+	path: string,
+	contentDir: string,
+	hangarPath: string,
+	projectPath: string,
+) {
 	// direct page watching
 	watch(path, { recursive: true }, async (_event, relativePath) => {
 		// biome-ignore lint/style/noNonNullAssertion: praying its not lowkey
-		createPage(folder(path, relativePath!), path, contentDir, hangarPath);
+		createPage(
+			folder(path, relativePath!),
+			path,
+			contentDir,
+			hangarPath,
+			projectPath,
+		);
 	});
 }

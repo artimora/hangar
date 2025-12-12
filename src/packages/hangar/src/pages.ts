@@ -1,10 +1,9 @@
 import { existsSync, lstatSync, writeFileSync } from "node:fs";
 import fs from "node:fs/promises";
 import nodePath from "node:path";
-import type { JSX } from "react";
-import { renderToString } from "react-dom/server";
 import {
 	addClientScript,
+	addStylesheets,
 	clientComponentConverter,
 	constructClientFile,
 	getClientComponents,
@@ -16,12 +15,13 @@ export async function createPages(
 	path: string,
 	targetPath: string,
 	hangarPath: string,
+	projectPath: string,
 ): Promise<void> {
 	const items = findFilesByExtensionRecursively(path, ".tsx");
 
 	for (let index = 0; index < items.length; index++) {
 		const element = items[index]!;
-		await createPage(element, path, targetPath, hangarPath);
+		await createPage(element, path, targetPath, hangarPath, projectPath);
 	}
 }
 
@@ -30,14 +30,16 @@ export async function createPage(
 	rootPath: string,
 	contentPath: string,
 	hangarPath: string,
+	projectPath: string,
 ): Promise<void> {
 	try {
 		const contents = await fs.readFile(path, "utf8");
 		const updated = await clientComponentConverter(contents, path);
 		const components = await getClientComponents(updated);
+		const styled = await addStylesheets(updated, projectPath);
 
 		const tempPath = folder(hangarPath, "temp.tsx");
-		writeFileSync(tempPath, updated);
+		writeFileSync(tempPath, styled);
 
 		const pageModule = await import(`${tempPath}?t=${Date.now()}`);
 
@@ -64,6 +66,7 @@ export async function createPage(
 		}
 
 		if (components.length > 0) rendered = await addClientScript(rendered);
+		rendered = await addStylesheets(rendered, projectPath);
 
 		writeFileSync(htmlPath, rendered);
 
