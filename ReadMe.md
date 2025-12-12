@@ -1,3 +1,3 @@
 # hangar
 
-> simple dev server powered by vite
+> simple dev server powered by vite and hono

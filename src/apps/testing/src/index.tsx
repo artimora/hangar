@@ -1,3 +1,5 @@
 import { start } from "@artimora/hangar";
 
-start(import.meta.url);
+const server = await start(import.meta.url);
+
+server.serve();

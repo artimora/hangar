@@ -1,15 +1,19 @@
+import type { HonoOptions } from "hono/hono-base";
 import type { ResolvedConfig as ViteConfig, ViteDevServer } from "vite";
+import type { NodeBindings } from "../mounting";
 
 export type Config = {
-	port?: number; // forwarded to vite
-	host?: boolean | string; // forwared to vite
+	port?: number; // forwared to honos node server
 	vite?: ViteConfig;
-	middleware?: boolean;
+	hono?: HonoOptions<{
+		Bindings: NodeBindings;
+	}>;
+	logs?: boolean;
 };
 
 export type Info = {
 	paths: Paths;
-	vite: ViteDevServer | undefined;
+	vite: ViteDevServer;
 	config: Config;
 };
 

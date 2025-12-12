@@ -1,22 +1,19 @@
 import { readFile } from "node:fs/promises";
-import { Hono } from "hono";
-import type { HonoBase } from "hono/hono-base";
-import type { Info } from "../core";
-import type { NodeBindings } from "./types";
+import type { Hangar } from "../main";
 import { resolveHtmlPath, toHonoMiddleware } from "./util";
 
-export function mount(info: Info): Hono<{ Bindings: NodeBindings }> {
-	const app = new Hono<{ Bindings: NodeBindings }>();
+export function mountMiddleware(server: Hangar): void {
+	server.use("*", toHonoMiddleware(server.hangar.vite));
+}
 
-	app.use("*", toHonoMiddleware(info.vite!));
-
-	app.get("*", async (c) => {
+export function mountPageCollector(server: Hangar): void {
+	server.get("*", async (c) => {
 		const url = c.req.path;
-		const htmlPath = resolveHtmlPath(info.paths.hangar.content, url);
+		const htmlPath = resolveHtmlPath(server.hangar.paths.hangar.content, url);
 
 		try {
 			const template = await readFile(htmlPath, "utf8");
-			const html = await info.vite!.transformIndexHtml(url, template);
+			const html = await server.hangar.vite.transformIndexHtml(url, template);
 			return c.html(html);
 		} catch (error) {
 			if ((error as NodeJS.ErrnoException).code === "ENOENT") {
@@ -27,6 +24,4 @@ export function mount(info: Info): Hono<{ Bindings: NodeBindings }> {
 			return c.text("Internal Server Error", 500);
 		}
 	});
-
-	return app;
 }

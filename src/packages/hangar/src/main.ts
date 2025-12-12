@@ -1,7 +1,8 @@
 import { watch } from "node:fs";
 import { fileURLToPath } from "node:url";
-import type { ExecutionContext, Hono } from "hono";
-import type { ViteDevServer } from "vite";
+import { serve } from "@hono/node-server";
+import { Hono } from "hono";
+import { logger } from "hono/logger";
 import {
 	type Config,
 	createPage,
@@ -9,38 +10,48 @@ import {
 	folder,
 	type Info,
 	makeDirs,
-	type Paths,
 	startVite,
 } from "./core";
-import { mount, type NodeBindings } from "./mounting";
+import {
+	mountMiddleware,
+	mountPageCollector,
+	type NodeBindings,
+} from "./mounting";
 
-export class Hangar {
-	public info: Info;
-	public paths: Paths;
-
-	private hono: Hono<{ Bindings: NodeBindings }>;
+export class Hangar extends Hono<{ Bindings: NodeBindings }> {
+	public hangar: Info;
 
 	constructor(info: Info) {
-		this.info = info;
-		this.paths = info.paths;
-		this.hono = mount(this.info);
-		this.handle = async (request, env, ctx) => {
-			return await this.hono.fetch(request, env, ctx);
+		super(info.config.hono);
+		this.hangar = info;
+
+		if (info.config.logs !== undefined && info.config.logs === true)
+			this.use(logger());
+
+		mountMiddleware(this);
+
+		this.serve = () => {
+			mountPageCollector(this);
+			serve({
+				fetch: this.fetch,
+				port: info.config.port,
+			});
+
+			if (info.config.logs !== undefined && info.config.logs === true)
+				console.log(
+					`dev server running at http://localhost:${info.config.port}`,
+				);
 		};
 	}
 
-	public handle: (
-		request: Request,
-		Env?: {} | NodeBindings | undefined | any,
-		executionCtx?: ExecutionContext,
-	) => Promise<Response> | Response;
+	serve: () => void;
 }
 
 export async function start(
 	path: string,
-	config: Config = {},
+	config: Config = { port: 1337, logs: true },
 ): Promise<Hangar> {
-	config ?? {};
+	config ??= { port: 1337, logs: true };
 
 	const dir = fileURLToPath(new URL("../", path));
 
