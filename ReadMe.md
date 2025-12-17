@@ -1,3 +1,6 @@
+> [!WARNING]  
+> This project is archived due to its internal use case being changed.
+
 # hangar
 
 > simple dev server powered by vite and hono
